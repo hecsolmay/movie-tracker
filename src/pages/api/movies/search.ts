@@ -1,9 +1,7 @@
 import { OMDB_API_KEY, OMDB_API_URL } from '@constants/config'
 import { movies } from '@constants/mock'
+import { res } from '@utils/api'
 import type { APIRoute } from 'astro'
-
-const res = (data: any, { status } = { status: 200 }) =>
-  new Response(JSON.stringify(data), { status })
 
 export const GET: APIRoute = async ({ url }) => {
   try {
