@@ -35,6 +35,7 @@
     "object-curly-spacing": ["warn", "always"],
     "array-element-newline": ["warn", "consistent"],
     "array-bracket-newline": ["warn", "consistent"],
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/unbound-method": "off"
   }
 }

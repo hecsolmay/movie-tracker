@@ -1,7 +1,7 @@
 export interface Movie {
-  id: number
+  id: string
   title: string
-  releaseDate: string
+  releaseYear: string
   poster: string
   watched: boolean
 }
