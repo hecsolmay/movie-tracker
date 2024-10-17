@@ -78,8 +78,9 @@
 
 <script>
   import { $ } from "@lib/dom";
-  import { debounce } from '@utils/debounce'
-  import { searchMovies } from "@services/movies";
+  import { debounce } from "@utils/debounce";
+  import { addNewMovieToList } from "@utils/reload";
+  import { searchMovies, SaveMovieToDB } from "@services/movies";
   import type { Movie } from "../types/movies";
 
   const searchInput = $<HTMLInputElement>("#movie-search");
@@ -120,10 +121,18 @@
           <span class="suggestion-title">${movie.title}</span>
         `;
     li.addEventListener("click", () => {
-      searchInput!.value = movie.title;
-      suggestionsList!.style.display = "none";
+      handleListItemClick(movie);
     });
     return li;
+  }
+
+  async function handleListItemClick(movie: Movie) {
+    const result = await SaveMovieToDB({ movie });
+    if (result.success) {
+      addNewMovieToList(movie)
+      searchInput!.value = "";
+      suggestionsList!.style.display = "none";
+    }
   }
 
   // Hide suggestions when clicking outside
