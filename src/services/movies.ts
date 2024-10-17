@@ -54,3 +54,54 @@ export async function SaveMovieToDB ({ movie }: { movie: Movie }) {
     }
   }
 }
+
+export async function patchMovieWatchedToDB (id: string, watched: boolean) {
+  try {
+    const response = await fetch('/api/movies/' + id, {
+      method: 'PATCH',
+      body: JSON.stringify({ watched })
+    })
+
+    if (!response.ok) throw new Error('Something went wrong')
+
+    if (response.status === 200) {
+      return {
+        success: true
+      }
+    }
+
+    return {
+      success: false
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false
+    }
+  }
+}
+
+export async function deleteMovieFromDB ({ id }: { id: string }) {
+  try {
+    const response = await fetch('/api/movies/' + id, {
+      method: 'DELETE'
+    })
+
+    if (!response.ok) throw new Error('Something went wrong')
+
+    if (response.status === 200) {
+      return {
+        success: true
+      }
+    }
+
+    return {
+      success: false
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false
+    }
+  }
+}
