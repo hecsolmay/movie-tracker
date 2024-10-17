@@ -1,5 +1,6 @@
 ---
 import type { Movie } from "../types/movies";
+import TrashCanIcon from "@components/icons/TrashCanIcon.astro";
 
 interface Props {
   movie: Movie;
@@ -8,7 +9,11 @@ interface Props {
 const { movie } = Astro.props;
 ---
 
-<div class="movie-card" data-status={movie.watched ? "watched" : "unwatched"}>
+<div
+  class="movie-card"
+  data-status={movie.watched ? "watched" : "unwatched"}
+  data-id={movie.id}
+>
   <img src={movie.poster} alt={`${movie.title} poster`} />
   <div class="movie-info">
     <h3>{movie.title}</h3>
@@ -17,6 +22,9 @@ const { movie } = Astro.props;
   <div class="hover-options">
     <button class="watch-btn">{movie.watched ? "Unwatch" : "Watch"}</button>
   </div>
+  <button class="trash-btn" aria-label="Delete movie">
+    <TrashCanIcon />
+  </button>
 </div>
 
 <style is:global>
@@ -74,24 +82,35 @@ const { movie } = Astro.props;
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .trash-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .trash-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .trash-btn svg {
+    width: 18px;
+    height: 18px;
+    color: white;
+  }
 </style>
 
 <script>
-  import { $$ } from "@lib/dom";
-  import { reloadFilteredMovies } from "@utils/reload";
+  import { createDeleteMoviesEvents, createPatchMoviesWatchedEvents } from '@utils/events';
 
-  const watchBtns = $$<HTMLButtonElement>(".watch-btn");
-
-  watchBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      // @ts-expect-error
-      const card = e.target.closest(".movie-card");
-      const currentStatus = card.dataset.status;
-      const newStatus = currentStatus === "watched" ? "unwatched" : "watched";
-      card.dataset.status = newStatus;
-      btn.textContent = newStatus === "watched" ? "Unwatch" : "Watch";
-      reloadFilteredMovies();
-      // Here you would typically update the movie's watched status in your data store
-    });
-  });
+  createPatchMoviesWatchedEvents()
+  createDeleteMoviesEvents()
 </script>
