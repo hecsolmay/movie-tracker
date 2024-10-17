@@ -15,8 +15,6 @@ export const GET: APIRoute = async ({ url }) => {
 
 async function searchOMDBMovies (search: string) {
   const trimmedSearch = search.trim()
-  console.log({ trimmedSearch })
-  console.log({ OMDB_API_KEY })
   if (trimmedSearch.length < 3) return []
 
   try {
@@ -29,12 +27,10 @@ async function searchOMDBMovies (search: string) {
       return []
     }
 
-    console.log({ data })
-
     return data.Search.map((movie: any) => ({
       id: movie.imdbID,
       title: movie.Title,
-      releaseDate: movie.Year,
+      releaseYear: movie.Year,
       poster: movie.Poster,
       watched: false
     }))
