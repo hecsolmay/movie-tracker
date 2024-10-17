@@ -1,0 +1,73 @@
+---
+import type { Movie } from "../types/movies";
+import MovieCard from "./MovieCard.astro";
+
+interface Props {
+  movies: Movie[];
+}
+
+const { movies } = Astro.props;
+---
+
+<div class="tabs">
+  <button class="tab active" data-filter="all">Todos</button>
+  <button class="tab" data-filter="watched">Vistos</button>
+  <button class="tab" data-filter="unwatched">Por ver</button>
+</div>
+
+<div class="movie-grid">
+  {movies.map((movie) => <MovieCard movie={movie} />)}
+</div>
+
+<style>
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .tab {
+    background-color: #2c2c2c;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  .tab.active,
+  .tab:hover {
+    background-color: rgb(var(--accent));
+  }
+  .movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+</style>
+
+<script>
+  import { $$ } from "@lib/dom";
+
+  const tabs = $$<HTMLButtonElement>(".tab");
+  const movieCards = $$(".movie-card");
+
+  const loadFilteredMovies = (filter: string) => {
+    movieCards.forEach((card) => {
+      if (filter === "all" || card.dataset.status === filter) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      const filter = tab.dataset.filter;
+      loadFilteredMovies(filter ?? "all");
+    });
+  });
+</script>

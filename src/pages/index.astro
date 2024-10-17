@@ -1,10 +1,45 @@
 ---
-import Layout from '@layouts/Layout.astro';
+import ListOfMovies from "@components/ListOfMovies.astro";
+import SearchBar from "@components/SearchBar.astro";
+import Layout from "@layouts/Layout.astro";
+import { getUserMovies } from "@services/movies";
+
+const movies = await getUserMovies()
 ---
 
 <Layout title="Movie Tracker">
-	<h1>Movie Tracker</h1>
+	<main>
+		<h1>Movie <span class="text-gradient">Tracker</span></h1>
+
+		<!-- ADD SEARCH BAR -->
+		<SearchBar />
+		<!-- DISPLAY MOVIES -->
+		 <ListOfMovies movies={movies} /> 
+	</main>
 </Layout>
 
 <style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: 1200px;
+		color: white;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+	h1 {
+		font-size: 3rem;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
 </style>

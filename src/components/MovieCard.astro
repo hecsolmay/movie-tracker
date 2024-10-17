@@ -1,0 +1,97 @@
+---
+import type { Movie } from "../types/movies";
+
+interface Props {
+  movie: Movie;
+}
+
+const { movie } = Astro.props;
+---
+
+<div class="movie-card" data-status={movie.watched ? "watched" : "unwatched"}>
+  <img src={movie.poster} alt={`${movie.title} poster`} />
+  <div class="movie-info">
+    <h3>{movie.title}</h3>
+    <p>{movie.releaseDate}</p>
+  </div>
+  <div class="hover-options">
+    <button class="watch-btn">{movie.watched ? "Unwatch" : "Watch"}</button>
+  </div>
+</div>
+
+<style>
+  .movie-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .movie-card:hover {
+    transform: scale(1.05);
+  }
+  .movie-card img {
+    width: 100%;
+    height: auto;
+  }
+  .movie-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+  }
+  .movie-info h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .movie-info p {
+    margin: 0.5rem 0 0;
+    font-size: 0.8rem;
+  }
+  .hover-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .movie-card:hover .hover-options {
+    opacity: 1;
+  }
+  .watch-btn {
+    padding: 0.5rem 1rem;
+    background-color: rgb(var(--accent));
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import { $$ } from "@lib/dom";
+import { reloadFilteredMovies } from "@utils/reload";
+
+  const watchBtns = $$<HTMLButtonElement>(".watch-btn");
+
+  watchBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      // @ts-expect-error
+      const card = e.target.closest(".movie-card");
+      const currentStatus = card.dataset.status;
+      const newStatus = currentStatus === "watched" ? "unwatched" : "watched";
+      card.dataset.status = newStatus;
+      btn.textContent = newStatus === "watched" ? "Unwatch" : "Watch";
+      reloadFilteredMovies();
+      // Here you would typically update the movie's watched status in your data store
+    });
+  });
+</script>
