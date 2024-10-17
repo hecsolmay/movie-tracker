@@ -10,7 +10,7 @@ const watchBtnEvent = (btn: HTMLButtonElement) => async (e: MouseEvent) => {
   const newStatus = currentStatus === 'watched' ? 'unwatched' : 'watched'
   const watched = newStatus === 'watched'
   card.dataset.status = newStatus
-  btn.textContent = watched ? 'Unwatch' : 'Watch'
+  btn.textContent = watched ? 'Por ver' : 'Visto'
 
   try {
     await patchMovieWatchedToDB(id, watched)
