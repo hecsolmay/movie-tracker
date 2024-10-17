@@ -12,7 +12,7 @@ const { movie } = Astro.props;
   <img src={movie.poster} alt={`${movie.title} poster`} />
   <div class="movie-info">
     <h3>{movie.title}</h3>
-    <p>{movie.releaseDate}</p>
+    <p>{movie.releaseYear}</p>
   </div>
   <div class="hover-options">
     <button class="watch-btn">{movie.watched ? "Unwatch" : "Watch"}</button>
