@@ -1,4 +1,5 @@
 import { $, $$ } from '@lib/dom'
+import { createDeleteMoviesEvents, createPatchMoviesWatchedEvents } from '@utils/events'
 import type { Movie } from '../types/movies'
 
 const tabs = $$<HTMLButtonElement>('.tab')
@@ -55,6 +56,7 @@ export function addNewMovieToList (movie: Movie) {
   }
 
   movieCard.setAttribute('data-status', movie.watched ? 'watched' : 'unwatched')
+  movieCard.setAttribute('data-id', movie.id)
 
   img.src = movie.poster
   img.alt = `${movie.title} poster`
@@ -67,18 +69,6 @@ export function addNewMovieToList (movie: Movie) {
 
   // Añadir al DOM
   movieGrid.insertBefore(clone, movieGrid.firstChild)
-  const watchBtns = $$<HTMLButtonElement>('.watch-btn')
-
-  watchBtns.forEach(btn => {
-    btn.addEventListener('click', e => {
-      // @ts-expect-error ts-expect-error
-      const card = e.target.closest('.movie-card')
-      const currentStatus = card.dataset.status
-      const newStatus = currentStatus === 'watched' ? 'unwatched' : 'watched'
-      card.dataset.status = newStatus
-      btn.textContent = newStatus === 'watched' ? 'Unwatch' : 'Watch'
-      reloadFilteredMovies()
-      // Here you would typically update the movie's watched status in your data store
-    })
-  })
+  createPatchMoviesWatchedEvents()
+  createDeleteMoviesEvents()
 }
