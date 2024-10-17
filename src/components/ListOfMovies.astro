@@ -19,6 +19,20 @@ const { movies } = Astro.props;
   {movies.map((movie) => <MovieCard movie={movie} />)}
 </div>
 
+<template id="movie-template">
+  <div class="movie-card" data-status="">
+    <img src="" alt="Movie poster" />
+    <div class="movie-info">
+      <h3></h3>
+      <p></p>
+    </div>
+    <div class="hover-options">
+      <button class="watch-btn"></button>
+    </div>
+  </div>
+</template>
+
+
 <style>
   .tabs {
     display: flex;
@@ -41,6 +55,7 @@ const { movies } = Astro.props;
   }
   .movie-grid {
     display: grid;
+    padding-inline: 8px;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 2rem;
   }
