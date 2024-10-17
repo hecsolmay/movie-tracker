@@ -1,6 +1,7 @@
 ---
+import TrashCanIcon from "@components/icons/TrashCanIcon.astro";
+import MovieCard from "@components/MovieCard.astro";
 import type { Movie } from "../types/movies";
-import MovieCard from "./MovieCard.astro";
 
 interface Props {
   movies: Movie[];
@@ -20,7 +21,7 @@ const { movies } = Astro.props;
 </div>
 
 <template id="movie-template">
-  <div class="movie-card" data-status="">
+  <div class="movie-card" data-status="" data-id="">
     <img src="" alt="Movie poster" />
     <div class="movie-info">
       <h3></h3>
@@ -29,9 +30,11 @@ const { movies } = Astro.props;
     <div class="hover-options">
       <button class="watch-btn"></button>
     </div>
+    <button class="trash-btn" aria-label="Delete movie">
+      <TrashCanIcon />
+    </button>
   </div>
 </template>
-
 
 <style>
   .tabs {
