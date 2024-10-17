@@ -1,5 +1,4 @@
 import { OMDB_API_KEY, OMDB_API_URL } from '@constants/config'
-import { movies } from '@constants/mock'
 import { res } from '@utils/api'
 import type { APIRoute } from 'astro'
 

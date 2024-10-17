@@ -3,7 +3,7 @@ import { validateMovieCreate } from '@utils/validate/movieSchema'
 import type { APIRoute } from 'astro'
 import { db, Movies } from 'astro:db'
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async () => {
   const movies = await db.select().from(Movies)
   const sortedMovies = movies.toReversed()
   return res({ message: 'ok', movies: sortedMovies })

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 export function debounce (fn: Function, delay: number) {
-  let timer = 0
+  let timer: NodeJS.Timeout
 
   return () => {
     clearTimeout(timer)

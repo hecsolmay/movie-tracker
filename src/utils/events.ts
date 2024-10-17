@@ -29,7 +29,7 @@ export function createPatchMoviesWatchedEvents () {
   })
 }
 
-const trashBtnEvent = (btn: HTMLButtonElement) => async (e: MouseEvent) => {
+const trashBtnEvent = (_btn: HTMLButtonElement) => async (e: MouseEvent) => {
   // @ts-expect-error ts-expect-error
   const card = e.target.closest('.movie-card') as HTMLDivElement
   const id = card.dataset.id ?? ''

@@ -28,3 +28,7 @@ pnpm-debug.log*
 .env.production
 .env.local
 .env.development
+
+#Ignore vercel files
+.vercel
+.vercel/**

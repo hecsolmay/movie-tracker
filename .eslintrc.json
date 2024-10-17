@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": "standard-with-typescript",
+  "extends": ["standard-with-typescript"],
   "overrides": [
     {
       // Define the configuration for `<script>` tag.
@@ -23,8 +23,8 @@
     "semi": ["warn", "never"],
     "no-trailing-spaces": "warn",
     "space-before-function-paren": "off",
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "off",
+    "no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "error",
     "object-curly-newline": [
       "warn",
       {

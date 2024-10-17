@@ -1,5 +1,3 @@
-import { OMDB_API_URL, OMDB_API_KEY } from '@constants/config'
-import { movies } from '@constants/mock'
 import type { Movie } from '../types/movies'
 
 export async function searchMovies ({ search = '' }: { search?: string }) {
