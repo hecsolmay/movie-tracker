@@ -9,7 +9,6 @@ export async function searchMovies ({ search = '' }: { search?: string }) {
   try {
     const response = await fetch('/api/movies/search?q=' + trimmedSearch)
     const data = await response.json()
-    console.log(data)
 
     return data.movies as Movie[]
   } catch (error) {
@@ -18,6 +17,40 @@ export async function searchMovies ({ search = '' }: { search?: string }) {
   }
 }
 
-export async function getUserMovies () {
-  return movies
+export async function getUserMovies (baseUrl = '/') {
+  try {
+    const response = await fetch(`${baseUrl}api/movies`)
+    if (!response.ok) throw new Error('Something went wrong')
+    const json = await response.json()
+    return json.movies as Movie[]
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}
+
+export async function SaveMovieToDB ({ movie }: { movie: Movie }) {
+  try {
+    const response = await fetch('/api/movies', {
+      method: 'POST',
+      body: JSON.stringify(movie)
+    })
+
+    if (!response.ok) throw new Error('Something went wrong')
+
+    if (response.status === 200) {
+      return {
+        success: true
+      }
+    }
+
+    return {
+      success: false
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false
+    }
+  }
 }
