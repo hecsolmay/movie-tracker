@@ -8,8 +8,18 @@ const MovieCreateSchema = object({
   watched: optional(boolean())
 })
 
-type MovieCreate = InferOutput<typeof MovieCreateSchema>
+export type MovieCreate = InferOutput<typeof MovieCreateSchema>
 
 export function validateMovieCreate (data: any) {
   return safeParse(MovieCreateSchema, data)
+}
+
+const ChangeWatchedSchema = object({
+  watched: boolean()
+})
+
+export type ChangeWatched = InferOutput<typeof ChangeWatchedSchema>
+
+export function validateChangeWatched (data: any) {
+  return safeParse(ChangeWatchedSchema, data)
 }
