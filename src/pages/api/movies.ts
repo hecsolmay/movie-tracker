@@ -19,9 +19,15 @@ export const POST: APIRoute = async ({ request }) => {
       return res({ message: 'Bad Request', issues }, { status: 400 })
     }
 
-    const movie = { ...output, watched: false }
+    const movie = { ...output, watched: output.watched ?? false }
 
-    await db.insert(Movies).values(movie).onConflictDoNothing()
+    await db
+      .insert(Movies)
+      .values(movie)
+      .onConflictDoUpdate({
+        target: [Movies.id],
+        set: movie
+      })
 
     return res({
       message: 'Ok, película guardada',

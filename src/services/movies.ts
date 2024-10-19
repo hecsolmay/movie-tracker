@@ -1,3 +1,4 @@
+import { addMovieToLocalDB } from '@lib/indexDB'
 import type { Movie } from '../types/movies'
 
 export async function searchMovies ({ search = '' }: { search?: string }) {
@@ -47,8 +48,17 @@ export async function SaveMovieToDB ({ movie }: { movie: Movie }) {
     }
   } catch (error) {
     console.error(error)
-    return {
-      success: false
+    try {
+      await addMovieToLocalDB(movie)
+
+      return {
+        success: true
+      }
+    } catch (error) {
+      console.error(error)
+      return {
+        success: false
+      }
     }
   }
 }
