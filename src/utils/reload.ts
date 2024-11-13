@@ -65,7 +65,7 @@ export function addNewMovieToList (movie: Movie) {
 
   releaseYear.textContent = movie.releaseYear
 
-  watchBtn.textContent = movie.watched ? 'Unwatch' : 'Watch'
+  watchBtn.textContent = movie.watched ? 'Por ver' : 'Visto'
 
   // Añadir al DOM
   movieGrid.insertBefore(clone, movieGrid.firstChild)
