@@ -1,5 +1,7 @@
 import { syncLocalDBWithServer } from './sync'
 
+console.log('Load offline utilities')
+
 window.addEventListener('offline', () => {
   console.log('You are offline')
 })
