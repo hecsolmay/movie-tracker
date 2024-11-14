@@ -1,4 +1,4 @@
-import { $$ } from '@lib/dom'
+import { $, $$ } from '@lib/dom'
 import { deleteMovieFromDB, patchMovieWatchedToDB } from '@services/movies'
 import { reloadFilteredMovies } from './reload'
 
@@ -11,9 +11,10 @@ const watchBtnEvent = (btn: HTMLButtonElement) => async (e: MouseEvent) => {
   const watched = newStatus === 'watched'
   card.dataset.status = newStatus
   btn.textContent = watched ? 'Por ver' : 'Visto'
-
+  const $userEmail = $('#user-email')
+  const userEmail = $userEmail?.dataset.email ?? ''
   try {
-    await patchMovieWatchedToDB(id, watched)
+    await patchMovieWatchedToDB(id, userEmail, watched)
     reloadFilteredMovies()
   } catch (error) {
     console.error(error)
@@ -33,9 +34,11 @@ const trashBtnEvent = (_btn: HTMLButtonElement) => async (e: MouseEvent) => {
   // @ts-expect-error ts-expect-error
   const card = e.target.closest('.movie-card') as HTMLDivElement
   const id = card.dataset.id ?? ''
+  const $userEmail = $('#user-email')
+  const userEmail = $userEmail?.dataset.email ?? ''
 
   try {
-    const result = await deleteMovieFromDB({ id })
+    const result = await deleteMovieFromDB({ id, userEmail })
 
     if (result.success) {
       card.remove()

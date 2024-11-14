@@ -16,9 +16,9 @@ export async function searchMovies ({ search = '' }: { search?: string }) {
   }
 }
 
-export async function getUserMovies (baseUrl = '/') {
+export async function getUserMovies (baseUrl = '/', userEmail: string) {
   try {
-    const response = await fetch(`${baseUrl}api/movies`)
+    const response = await fetch(`${baseUrl}api/movies?userEmail=${userEmail}`)
     if (!response.ok) throw new Error('Something went wrong')
     const json = await response.json()
     return json.movies as Movie[]
@@ -28,11 +28,17 @@ export async function getUserMovies (baseUrl = '/') {
   }
 }
 
-export async function SaveMovieToDB ({ movie }: { movie: Movie }) {
+export async function SaveMovieToDB ({
+  movie,
+  userEmail
+}: {
+  movie: Movie
+  userEmail: string
+}) {
   try {
     const response = await fetch('/api/movies', {
       method: 'POST',
-      body: JSON.stringify(movie)
+      body: JSON.stringify({ ...movie, userEmail })
     })
 
     if (!response.ok) throw new Error('Something went wrong')
@@ -63,11 +69,11 @@ export async function SaveMovieToDB ({ movie }: { movie: Movie }) {
   }
 }
 
-export async function patchMovieWatchedToDB (id: string, watched: boolean) {
+export async function patchMovieWatchedToDB (movieId: string, userEmail: string, watched: boolean) {
   try {
-    const response = await fetch('/api/movies/' + id, {
+    const response = await fetch('/api/movies/' + movieId, {
       method: 'PATCH',
-      body: JSON.stringify({ watched })
+      body: JSON.stringify({ watched, userEmail })
     })
 
     if (!response.ok) throw new Error('Something went wrong')
@@ -89,10 +95,11 @@ export async function patchMovieWatchedToDB (id: string, watched: boolean) {
   }
 }
 
-export async function deleteMovieFromDB ({ id }: { id: string }) {
+export async function deleteMovieFromDB ({ id, userEmail }: { id: string, userEmail: string }) {
   try {
     const response = await fetch('/api/movies/' + id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      body: JSON.stringify({ userEmail })
     })
 
     if (!response.ok) throw new Error('Something went wrong')

@@ -1,3 +1,4 @@
+import { saveUserIfNotExists } from '@services/users'
 import { defineMiddleware } from 'astro:middleware'
 import { getSession } from 'auth-astro/server'
 
@@ -16,6 +17,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (session !== null && isLoginPage) {
     return context.redirect('/')
+  }
+
+  if (session?.user !== undefined) {
+    const user = {
+      email: session.user.email ?? '',
+      name: session.user.name ?? '',
+      image: session.user.image ?? ''
+    }
+    await saveUserIfNotExists(user)
   }
 
   return await next()

@@ -1,7 +1,7 @@
 import { res } from '@utils/api'
 import { validateChangeWatched } from '@utils/validate/movieSchema'
 import type { APIRoute } from 'astro'
-import { db, eq, Movies } from 'astro:db'
+import { and, db, eq, UserMovies } from 'astro:db'
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   const { id } = params
@@ -13,11 +13,17 @@ export const PATCH: APIRoute = async ({ params, request }) => {
     return res({ message: 'Bad Request', issues }, { status: 400 })
   }
 
+  const { watched, userEmail } = output
   try {
     const updatedMovie = await db
-      .update(Movies)
-      .set(output)
-      .where(eq(Movies.id, id ?? ''))
+      .update(UserMovies)
+      .set({ watched })
+      .where(
+        and(
+          eq(UserMovies.movieId, id ?? ''),
+          eq(UserMovies.userEmail, userEmail)
+        )
+      )
 
     if (updatedMovie.rowsAffected === 0) {
       return res({ message: 'Movie not found' }, { status: 404 })
@@ -33,11 +39,24 @@ export const PATCH: APIRoute = async ({ params, request }) => {
   }
 }
 
-export const DELETE: APIRoute = async ({ params }) => {
+export const DELETE: APIRoute = async ({ params, request }) => {
   try {
     const id = params.id ?? ''
+    const body = await request.json()
+    const { userEmail } = body
 
-    const result = await db.delete(Movies).where(eq(Movies.id, id))
+    if (typeof userEmail !== 'string') {
+      return res({ message: 'Bad Request' }, { status: 400 })
+    }
+
+    const result = await db
+      .delete(UserMovies)
+      .where(
+        and(
+          eq(UserMovies.movieId, id),
+          eq(UserMovies.userEmail, userEmail)
+        )
+      )
 
     if (result.rowsAffected === 0) {
       return res({ message: 'Movie not found' }, { status: 404 })

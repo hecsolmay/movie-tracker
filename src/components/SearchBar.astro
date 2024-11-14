@@ -1,3 +1,10 @@
+---
+import { getSession } from "auth-astro/server";
+const session = await getSession(Astro.request);
+
+const userEmail = session?.user?.email ?? "";
+---
+
 <div class="search-container">
   <input
     type="text"
@@ -127,9 +134,12 @@
   }
 
   async function handleListItemClick(movie: Movie) {
-    const result = await SaveMovieToDB({ movie });
+    const $userEmail = $("#user-email");
+
+    const userEmail = $userEmail?.dataset.email ?? '' 
+    const result = await SaveMovieToDB({ movie, userEmail });
     if (result.success) {
-      addNewMovieToList(movie)
+      addNewMovieToList(movie);
       searchInput!.value = "";
       suggestionsList!.style.display = "none";
     }

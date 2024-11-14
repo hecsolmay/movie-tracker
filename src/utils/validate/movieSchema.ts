@@ -5,7 +5,8 @@ const MovieCreateSchema = object({
   title: string(),
   releaseYear: string(),
   poster: string(),
-  watched: optional(boolean())
+  watched: optional(boolean()),
+  userEmail: string()
 })
 
 export type MovieCreate = InferOutput<typeof MovieCreateSchema>
@@ -15,7 +16,8 @@ export function validateMovieCreate (data: any) {
 }
 
 const ChangeWatchedSchema = object({
-  watched: boolean()
+  watched: boolean(),
+  userEmail: string()
 })
 
 export type ChangeWatched = InferOutput<typeof ChangeWatchedSchema>

@@ -8,8 +8,20 @@ const session = await getSession(Astro.request);
   session?.user && (
     <div class="inline-flex justify-end w-full pt-4 pb-8">
       <div class="user-session">
-        {session.user.image && <img src={session.user.image} alt="user-image" class="size-8 rounded-full" />}
-        <span class="user-email">{session.user.name}</span>
+        {session.user.image && (
+          <img
+            src={session.user.image}
+            alt="user-image"
+            class="size-8 rounded-full"
+          />
+        )}
+        <span
+          data-email={session.user.email}
+          id="user-email"
+          class="user-email"
+        >
+          {session.user.name}
+        </span>
         <button id="logout" class="logout-btn">
           Cerrar sesión
         </button>
