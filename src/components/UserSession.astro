@@ -1,0 +1,62 @@
+---
+import { getSession } from "auth-astro/server";
+
+const session = await getSession(Astro.request);
+---
+
+{
+  session?.user && (
+    <div class="inline-flex justify-end w-full pt-4 pb-8">
+      <div class="user-session">
+        {session.user.image && <img src={session.user.image} alt="user-image" class="size-8 rounded-full" />}
+        <span class="user-email">{session.user.name}</span>
+        <button id="logout" class="logout-btn">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  import { $ } from "@lib/dom";
+  const { signOut } = await import("auth-astro/client");
+  const logoutBtn = $("#logout");
+
+  if (logoutBtn) {
+    logoutBtn.onclick = () => signOut();
+  }
+</script>
+
+<style>
+  .user-session {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+  }
+
+  .user-email {
+    color: rgb(var(--accent-light));
+  }
+
+  .logout-btn {
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgb(var(--accent));
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .logout-btn:hover {
+    background-color: rgb(var(--accent));
+    transform: translateY(-1px);
+  }
+
+  .logout-btn:active {
+    transform: translateY(0);
+  }
+</style>

@@ -3,6 +3,7 @@ import ListOfMovies from "@components/ListOfMovies.astro";
 import SearchBar from "@components/SearchBar.astro";
 import Layout from "@layouts/Layout.astro";
 import { getUserMovies } from "@services/movies";
+import UserSession from '@components/UserSession.astro';
 
 const {url } = Astro.request
 
@@ -11,6 +12,8 @@ const movies = await getUserMovies(url);
 
 <Layout title="Movie Tracker">
 	<main>
+		<UserSession />
+		
 		<h1>Movie <span class="text-gradient">Tracker</span></h1>
 
 		<!-- ADD SEARCH BAR -->
