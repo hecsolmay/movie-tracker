@@ -1,18 +1,34 @@
 import { $, $$ } from '@lib/dom'
-import { createDeleteMoviesEvents, createPatchMoviesWatchedEvents } from '@utils/events'
+import {
+  createDeleteMoviesEvents,
+  createPatchMoviesWatchedEvents
+} from '@utils/events'
 import type { Movie } from '../types/movies'
 
 const tabs = $$<HTMLButtonElement>('.tab')
-const movieCards = $$('.movie-card')
-
+const $emptyState = $('#empty-state')
 export function loadFilteredMovies (filter: string) {
+  const movieCards = $$('.movie-card')
+  let showCount = 0
+
+  console.log(movieCards.length)
+
   movieCards.forEach(card => {
     if (filter === 'all' || card.dataset.status === filter) {
       card.style.display = 'block'
+      showCount++
     } else {
       card.style.display = 'none'
     }
   })
+
+  if ($emptyState === null) return
+
+  if (showCount === 0) {
+    $emptyState.style.display = 'block'
+  } else {
+    $emptyState.style.display = 'none'
+  }
 }
 
 export function getActiveFilter () {
@@ -69,6 +85,7 @@ export function addNewMovieToList (movie: Movie) {
 
   // Añadir al DOM
   movieGrid.insertBefore(clone, movieGrid.firstChild)
+  reloadFilteredMovies()
   createPatchMoviesWatchedEvents()
   createDeleteMoviesEvents()
 }

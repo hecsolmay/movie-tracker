@@ -1,5 +1,6 @@
 ---
 import TrashCanIcon from "@components/icons/TrashCanIcon.astro";
+import ListOfMoviesEmptyState from "@components/ListOfMoviesEmptyState.astro";
 import MovieCard from "@components/MovieCard.astro";
 import type { Movie } from "../types/movies";
 
@@ -19,6 +20,8 @@ const { movies } = Astro.props;
 <div class="movie-grid">
   {movies.map((movie) => <MovieCard movie={movie} />)}
 </div>
+
+<ListOfMoviesEmptyState movies={movies} />
 
 <template id="movie-template">
   <div class="movie-card" data-status="" data-id="">
@@ -65,19 +68,31 @@ const { movies } = Astro.props;
 </style>
 
 <script>
-  import { $$ } from "@lib/dom";
+  import { $, $$ } from "@lib/dom";
 
   const tabs = $$<HTMLButtonElement>(".tab");
-  const movieCards = $$(".movie-card");
+    const $emptyState = $("#empty-state");
+    
+    const loadFilteredMovies = (filter: string) => {
+    const movieCards = $$(".movie-card");
+    let showCount = 0;
 
-  const loadFilteredMovies = (filter: string) => {
     movieCards.forEach((card) => {
       if (filter === "all" || card.dataset.status === filter) {
         card.style.display = "block";
+        showCount++;
       } else {
         card.style.display = "none";
       }
     });
+
+    if ($emptyState === null) return;
+
+    if (showCount === 0) {
+      $emptyState.style.display = "block";
+    } else {
+      $emptyState.style.display = "none";
+    }
   };
 
   tabs.forEach((tab) => {

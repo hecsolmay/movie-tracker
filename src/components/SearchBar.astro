@@ -86,7 +86,7 @@ const userEmail = session?.user?.email ?? "";
 <script>
   import { $ } from "@lib/dom";
   import { debounce } from "@utils/debounce";
-  import { addNewMovieToList } from "@utils/reload";
+  import { addNewMovieToList, reloadFilteredMovies } from "@utils/reload";
   import { searchMovies, SaveMovieToDB } from "@services/movies";
   import type { Movie } from "../types/movies";
 
@@ -142,6 +142,7 @@ const userEmail = session?.user?.email ?? "";
       addNewMovieToList(movie);
       searchInput!.value = "";
       suggestionsList!.style.display = "none";
+ 
     }
   }
 

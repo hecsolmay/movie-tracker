@@ -13,9 +13,10 @@ const watchBtnEvent = (btn: HTMLButtonElement) => async (e: MouseEvent) => {
   btn.textContent = watched ? 'Por ver' : 'Visto'
   const $userEmail = $('#user-email')
   const userEmail = $userEmail?.dataset.email ?? ''
+  reloadFilteredMovies()
   try {
     await patchMovieWatchedToDB(id, userEmail, watched)
-    reloadFilteredMovies()
+    console.log('Movie updated')
   } catch (error) {
     console.error(error)
   }
@@ -41,6 +42,7 @@ const trashBtnEvent = (_btn: HTMLButtonElement) => async (e: MouseEvent) => {
     const result = await deleteMovieFromDB({ id, userEmail })
 
     if (result.success) {
+      console.log('Movie deleted')
       card.remove()
       reloadFilteredMovies()
     }
