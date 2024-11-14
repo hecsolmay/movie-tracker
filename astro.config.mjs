@@ -10,9 +10,11 @@ import { manifest } from './src/utils/pwa'
 
 import vercel from '@astrojs/vercel/serverless'
 
+import auth from 'auth-astro'
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), db()],
+  integrations: [tailwind(), db(), auth()],
   vite: {
     plugins: [
       AstroPWA({
