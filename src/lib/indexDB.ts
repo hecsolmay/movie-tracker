@@ -15,7 +15,6 @@ export function openDB (dbName: string) {
 
 // Function to create a register of Movies in the database and add a new Movie
 export async function addMovieToLocalDB (movie: Movie) {
-  console.log('addMovieToLocalDB')
   const db = openDB(DB_NAME)
   await db.movies.add(movie)
 }

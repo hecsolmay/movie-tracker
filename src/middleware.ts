@@ -5,9 +5,7 @@ const LOGIN_PAGE_ROUTE = '/login'
 const PROTECTED_ROUTES = ['/']
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  console.log('onRequest from middleware')
   const session = await getSession(context.request)
-  console.log({ session })
   const isLoginPage = context.url.pathname === LOGIN_PAGE_ROUTE
   if (
     session === null &&
