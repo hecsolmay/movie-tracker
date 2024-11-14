@@ -53,6 +53,12 @@ export function addNewMovieToList (movie: Movie) {
 
   if (movieCardTemplate === null || movieGrid === null) return
 
+  const existMovie = movieGrid.querySelector(`[data-id="${movie.id}"]`)
+
+  if (existMovie !== null) {
+    return
+  }
+
   const clone = document.importNode(movieCardTemplate.content, true)
   // Configurar los datos dinámicos
   const movieCard = clone.querySelector('.movie-card')

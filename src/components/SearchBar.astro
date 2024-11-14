@@ -5,7 +5,7 @@ const session = await getSession(Astro.request);
 const userEmail = session?.user?.email ?? "";
 ---
 
-<div class="search-container">
+<div class="search-container relative">
   <input
     type="text"
     id="movie-search"
@@ -13,6 +13,13 @@ const userEmail = session?.user?.email ?? "";
     placeholder="Busca una pelicula para añadirla a ver mas tarde..."
   />
   <ul id="suggestions" class="suggestions"></ul>
+  <div
+    id="suggestion-empty"
+    style="display: none"
+    class="absolute top-14 bg-[#2c2c2c] border border-[#4a4a4a] z-20 rounded-md py-12 left-0 w-full text-center text-gray-400 text-sm"
+  >
+    No se encontraron peliculas con tu búsqueda
+  </div>
 </div>
 
 <style is:global>
@@ -92,15 +99,22 @@ const userEmail = session?.user?.email ?? "";
 
   const searchInput = $<HTMLInputElement>("#movie-search");
   const suggestionsList = $<HTMLUListElement>("#suggestions");
+  const emptySuggestions = $<HTMLDivElement>("#suggestion-empty");
 
   searchInput?.addEventListener("input", debounce(handleSearch, 500));
 
   async function handleSearch() {
-    if (searchInput === null || suggestionsList === null) return;
+    if (
+      searchInput === null ||
+      suggestionsList === null ||
+      emptySuggestions === null
+    )
+      return;
     const inputValue = searchInput.value.toLowerCase();
 
     if (inputValue.length < 3) {
       suggestionsList.style.display = "none";
+      emptySuggestions.style.display = "none";
       return;
     }
 
@@ -109,10 +123,20 @@ const userEmail = session?.user?.email ?? "";
   }
 
   function displaySuggestions(filteredMovies: Movie[]) {
-    if (suggestionsList === null || searchInput === null) return;
+    if (
+      searchInput === null ||
+      suggestionsList === null ||
+      emptySuggestions === null
+    )
+      return;
     suggestionsList.innerHTML = "";
 
-    if (filteredMovies.length === 0) return;
+    if (filteredMovies.length === 0) {
+      emptySuggestions.style.display = "block";
+      return;
+    } else {
+      emptySuggestions.style.display = "none";
+    }
 
     filteredMovies.forEach((movie) => {
       const li = createSuggestion(movie);
@@ -136,13 +160,12 @@ const userEmail = session?.user?.email ?? "";
   async function handleListItemClick(movie: Movie) {
     const $userEmail = $("#user-email");
 
-    const userEmail = $userEmail?.dataset.email ?? '' 
+    const userEmail = $userEmail?.dataset.email ?? "";
     const result = await SaveMovieToDB({ movie, userEmail });
     if (result.success) {
       addNewMovieToList(movie);
       searchInput!.value = "";
       suggestionsList!.style.display = "none";
- 
     }
   }
 
