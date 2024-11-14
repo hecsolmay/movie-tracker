@@ -1,7 +1,7 @@
 import { res } from '@utils/api'
 import { validateMovieCreate } from '@utils/validate/movieSchema'
 import type { APIRoute } from 'astro'
-import { db, eq, Movies, UserMovies } from 'astro:db'
+import { and, db, eq, Movies, UserMovies } from 'astro:db'
 
 export const GET: APIRoute = async ({ url }) => {
   const userEmail = url.searchParams.get('userEmail')
@@ -49,6 +49,20 @@ export const POST: APIRoute = async ({ request }) => {
       movieId: movie.id,
       userEmail: output.userEmail,
       watched: movie.watched ?? false
+    }
+
+    const existedUserMovie = await db
+      .select()
+      .from(UserMovies)
+      .where(
+        and(
+          eq(UserMovies.movieId, movie.id),
+          eq(UserMovies.userEmail, output.userEmail)
+        )
+      )
+
+    if (existedUserMovie.length > 0) {
+      return res({ message: 'Movie already exists' }, { status: 400 })
     }
 
     await db.insert(UserMovies).values(newUserMovie).onConflictDoNothing()
