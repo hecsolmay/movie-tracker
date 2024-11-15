@@ -1,4 +1,8 @@
-import { addMovieToLocalDB } from '@lib/indexDB'
+import {
+  addMovieToLocalDB,
+  removeMovieFromLocalDB,
+  updateMovieInLocalBd
+} from '@lib/indexDB'
 import type { Movie } from '../types/movies'
 
 export async function searchMovies ({ search = '' }: { search?: string }) {
@@ -69,7 +73,11 @@ export async function SaveMovieToDB ({
   }
 }
 
-export async function patchMovieWatchedToDB (movieId: string, userEmail: string, watched: boolean) {
+export async function patchMovieWatchedToDB (
+  movieId: string,
+  userEmail: string,
+  watched: boolean
+) {
   try {
     const response = await fetch('/api/movies/' + movieId, {
       method: 'PATCH',
@@ -89,13 +97,26 @@ export async function patchMovieWatchedToDB (movieId: string, userEmail: string,
     }
   } catch (error) {
     console.error(error)
-    return {
-      success: false
+    try {
+      await updateMovieInLocalBd(movieId, { watched })
+      return {
+        success: true
+      }
+    } catch (error) {
+      return {
+        success: false
+      }
     }
   }
 }
 
-export async function deleteMovieFromDB ({ id, userEmail }: { id: string, userEmail: string }) {
+export async function deleteMovieFromDB ({
+  id,
+  userEmail
+}: {
+  id: string
+  userEmail: string
+}) {
   try {
     const response = await fetch('/api/movies/' + id, {
       method: 'DELETE',
@@ -114,9 +135,15 @@ export async function deleteMovieFromDB ({ id, userEmail }: { id: string, userEm
       success: false
     }
   } catch (error) {
-    console.error(error)
-    return {
-      success: false
+    try {
+      await removeMovieFromLocalDB(id)
+      return {
+        success: true
+      }
+    } catch (error) {
+      return {
+        success: false
+      }
     }
   }
 }
