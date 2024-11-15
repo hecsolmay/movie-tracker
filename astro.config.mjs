@@ -20,7 +20,24 @@ export default defineConfig({
       AstroPWA({
         registerType: 'autoUpdate',
         manifest,
-        base: '/'
+        base: '/',
+        workbox: {
+          globDirectory: '.vercel/output/static',
+          globPatterns: ['**/*.{html,js,css,woff,woff2,ttf,eot,ico,ts}'],
+          runtimeCaching: [
+            {
+              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'images',
+                expiration: {
+                  maxEntries: 100,
+                  maxAgeSeconds: 30 * 24 * 60 * 60
+                }
+              }
+            }
+          ]
+        }
       })
     ]
   },
