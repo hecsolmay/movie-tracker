@@ -1,3 +1,4 @@
+import { createUserMovieFromId } from '@services/userMovies'
 import { res } from '@utils/api'
 import { validateChangeWatched } from '@utils/validate/movieSchema'
 import type { APIRoute } from 'astro'
@@ -25,14 +26,24 @@ export const PATCH: APIRoute = async ({ params, request }) => {
         )
       )
 
-    if (updatedMovie.rowsAffected === 0) {
-      return res({ message: 'Movie not found' }, { status: 404 })
+    if (updatedMovie.rowsAffected !== 0) {
+      return res({
+        message: 'Movie updated',
+        updatedCount: updatedMovie.rowsAffected
+      })
     }
 
-    return res({
-      message: 'Movie updated',
-      updatedCount: updatedMovie.rowsAffected
-    })
+    const { success } = await createUserMovieFromId(
+      id ?? '',
+      userEmail,
+      output.watched
+    )
+
+    if (!success) {
+      return res({ message: 'Something went wrong' }, { status: 400 })
+    }
+
+    return res({ message: 'Movie Updated' })
   } catch (error) {
     console.error(error)
     return res({ message: 'Something went wrong' }, { status: 500 })
@@ -52,10 +63,7 @@ export const DELETE: APIRoute = async ({ params, request }) => {
     const result = await db
       .delete(UserMovies)
       .where(
-        and(
-          eq(UserMovies.movieId, id),
-          eq(UserMovies.userEmail, userEmail)
-        )
+        and(eq(UserMovies.movieId, id), eq(UserMovies.userEmail, userEmail))
       )
 
     if (result.rowsAffected === 0) {
