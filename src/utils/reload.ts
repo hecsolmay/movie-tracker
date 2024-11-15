@@ -1,7 +1,7 @@
 import { $, $$ } from '@lib/dom'
 import {
-  createDeleteMoviesEvents,
-  createPatchMoviesWatchedEvents
+  createFirstDeleteMovieEvent,
+  createFirstPatchMovieWatchEvent
 } from '@utils/events'
 import type { Movie } from '../types/movies'
 
@@ -92,6 +92,6 @@ export function addNewMovieToList (movie: Movie) {
   // Añadir al DOM
   movieGrid.insertBefore(clone, movieGrid.firstChild)
   reloadFilteredMovies()
-  createPatchMoviesWatchedEvents()
-  createDeleteMoviesEvents()
+  createFirstDeleteMovieEvent()
+  createFirstPatchMovieWatchEvent()
 }

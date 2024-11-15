@@ -13,9 +13,9 @@ const watchBtnEvent = (btn: HTMLButtonElement) => async (e: MouseEvent) => {
   btn.textContent = watched ? 'Por ver' : 'Visto'
   const $userEmail = $('#user-email')
   const userEmail = $userEmail?.dataset.email ?? ''
-  reloadFilteredMovies()
   try {
     await patchMovieWatchedToDB(id, userEmail, watched)
+    reloadFilteredMovies()
     console.log('Movie updated')
   } catch (error) {
     console.error(error)
@@ -26,6 +26,8 @@ export function createPatchMoviesWatchedEvents () {
   const watchBtns = $$<HTMLButtonElement>('.watch-btn')
 
   watchBtns.forEach(btn => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    btn.removeEventListener('click', watchBtnEvent(btn))
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     btn.addEventListener('click', watchBtnEvent(btn))
   })
@@ -58,4 +60,22 @@ export function createDeleteMoviesEvents () {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     btn.addEventListener('click', trashBtnEvent(btn))
   })
+}
+
+export function createFirstDeleteMovieEvent () {
+  const $trashBtn = $<HTMLButtonElement>('.trash-btn')
+
+  if ($trashBtn === null) return
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  $trashBtn.addEventListener('click', trashBtnEvent($trashBtn))
+}
+
+export function createFirstPatchMovieWatchEvent () {
+  const $watchBtn = $<HTMLButtonElement>('.watch-btn')
+
+  if ($watchBtn === null) return
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  $watchBtn.addEventListener('click', watchBtnEvent($watchBtn))
 }
