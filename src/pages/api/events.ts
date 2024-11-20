@@ -21,6 +21,8 @@ export const GET: APIRoute = async ({ request, url }) => {
           controller.enqueue(`data: ${JSON.stringify(data)}\n\n`)
         }
 
+        controller.enqueue(`data:user ${email} connected to the server event\n\n`)
+
         if (!clients.has(email)) {
           clients.set(email, [])
         }
@@ -56,8 +58,6 @@ export const GET: APIRoute = async ({ request, url }) => {
 
 // Emitir eventos a todos los clientes conectados
 export const emitEvent = (email: string, type: EventType, data: object) => {
-  console.log(clients)
-
   clients.get(email)?.forEach(fn => {
     fn({ type, data })
   })
