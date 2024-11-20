@@ -28,10 +28,6 @@ eventSource.onmessage = event => {
   handleEvent(eventData as EventData)
 }
 
-eventSource.onerror = error => {
-  console.error('Error:', error)
-}
-
 function handleEvent (event: EventData) {
   const hasType = event?.type !== undefined
   const hasData = event?.data !== undefined

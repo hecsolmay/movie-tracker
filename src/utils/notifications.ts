@@ -17,7 +17,7 @@ export async function scheduleNotification (movieTitle: string, delay: number) {
     setTimeout(() => {
       registration.showNotification('¡Nueva Película Agregada!', {
         body: `No olvides revisar la película: ${movieTitle}`,
-        icon: '/icon-192x192.png',
+        icon: '/images/icons/icon-192x192.png',
         tag: 'add-movie' // Útil para evitar duplicados
       }).catch(error => { console.error(error) })
     }, delay)
