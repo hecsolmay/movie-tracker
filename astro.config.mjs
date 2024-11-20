@@ -19,7 +19,11 @@ export default defineConfig({
     plugins: [
       AstroPWA({
         registerType: 'autoUpdate',
-        injectRegister: 'script',
+        injectRegister: 'auto',
+        devOptions: {
+          enabled: true,
+          type: 'module'
+        },
         manifest,
         base: '/',
         workbox: {
@@ -40,7 +44,12 @@ export default defineConfig({
           ]
         }
       })
-    ]
+    ],
+    build: {
+      rollupOptions: {
+        external: ['virtual:pwa-register']
+      }
+    }
   },
   output: 'server',
   adapter: vercel()
