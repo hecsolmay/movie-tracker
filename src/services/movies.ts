@@ -45,9 +45,7 @@ export async function SaveMovieToDB ({
       body: JSON.stringify({ ...movie, userEmail })
     })
 
-    if (!response.ok) throw new Error('Something went wrong')
-
-    if (response.status === 200) {
+    if (response.ok && response.status === 200) {
       return {
         success: true
       }
@@ -84,9 +82,7 @@ export async function patchMovieWatchedToDB (
       body: JSON.stringify({ watched, userEmail })
     })
 
-    if (!response.ok) throw new Error('Something went wrong')
-
-    if (response.status === 200) {
+    if (response.ok && response.status === 200) {
       return {
         success: true
       }
@@ -123,9 +119,7 @@ export async function deleteMovieFromDB ({
       body: JSON.stringify({ userEmail })
     })
 
-    if (!response.ok) throw new Error('Something went wrong')
-
-    if (response.status === 200) {
+    if (response.ok && response.status === 200) {
       return {
         success: true
       }
