@@ -4,6 +4,7 @@ import {
   createFirstPatchMovieWatchEvent
 } from '@utils/events'
 import type { Movie } from '../types/movies'
+import { scheduleNotification } from './notifications'
 
 const tabs = $$<HTMLButtonElement>('.tab')
 const $emptyState = $('#empty-state')
@@ -94,4 +95,6 @@ export function addNewMovieToList (movie: Movie) {
   reloadFilteredMovies()
   createFirstDeleteMovieEvent()
   createFirstPatchMovieWatchEvent()
+  scheduleNotification(movie.title, 5000)
+    .catch(error => { console.error(error) })
 }
