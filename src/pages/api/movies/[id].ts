@@ -3,6 +3,7 @@ import { res } from '@utils/api'
 import { validateChangeWatched } from '@utils/validate/movieSchema'
 import type { APIRoute } from 'astro'
 import { and, db, eq, UserMovies } from 'astro:db'
+import { emitEvent } from '../events'
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   const { id } = params
@@ -27,13 +28,14 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       )
 
     if (updatedMovie.rowsAffected !== 0) {
+      emitEvent(userEmail, 'update', { id, watched })
       return res({
         message: 'Movie updated',
         updatedCount: updatedMovie.rowsAffected
       })
     }
 
-    const { success } = await createUserMovieFromId(
+    const { success, movie } = await createUserMovieFromId(
       id ?? '',
       userEmail,
       output.watched
@@ -43,6 +45,7 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       return res({ message: 'Something went wrong' }, { status: 400 })
     }
 
+    emitEvent(userEmail, 'update', movie ?? {})
     return res({ message: 'Movie Updated' })
   } catch (error) {
     console.error(error)
@@ -70,6 +73,7 @@ export const DELETE: APIRoute = async ({ params, request }) => {
       return res({ message: 'Movie not found' }, { status: 404 })
     }
 
+    emitEvent(userEmail, 'delete', { id })
     return res({ message: 'Movie deleted' })
   } catch (error) {
     return res({ message: 'Something went wrong' }, { status: 500 })

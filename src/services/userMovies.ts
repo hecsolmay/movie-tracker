@@ -21,7 +21,8 @@ export async function createUserMovieFromId (
       })
 
       return {
-        success: true
+        success: true,
+        movie: existedMovie[0]
       }
     }
 
@@ -36,7 +37,8 @@ export async function createUserMovieFromId (
       })
 
       return {
-        success: true
+        success: true,
+        movie
       }
     }
 

@@ -2,6 +2,7 @@ import { res } from '@utils/api'
 import { validateMovieCreate } from '@utils/validate/movieSchema'
 import type { APIRoute } from 'astro'
 import { and, db, eq, Movies, UserMovies } from 'astro:db'
+import { emitEvent } from './events'
 
 export const GET: APIRoute = async ({ url }) => {
   const userEmail = url.searchParams.get('userEmail')
@@ -66,6 +67,10 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     await db.insert(UserMovies).values(newUserMovie).onConflictDoNothing()
+
+    const { userEmail, ...clearMovie } = output
+
+    emitEvent(userEmail, 'create', clearMovie)
 
     return res({
       message: 'Ok, película guardada',
