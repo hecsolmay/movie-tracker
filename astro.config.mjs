@@ -19,6 +19,7 @@ export default defineConfig({
     plugins: [
       AstroPWA({
         registerType: 'autoUpdate',
+        injectRegister: 'auto',
         manifest,
         base: '/',
         workbox: {
