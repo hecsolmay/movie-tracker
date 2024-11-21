@@ -1,16 +1,9 @@
----
-import { getSession } from "auth-astro/server";
-const session = await getSession(Astro.request);
-
-const userEmail = session?.user?.email ?? "";
----
-
 <div class="search-container relative">
   <input
     type="text"
     id="movie-search"
     autocomplete="off"
-    placeholder="Busca una pelicula para añadirla a ver mas tarde..."
+    placeholder="Busca una película para añadirla a ver mas tarde..."
   />
   <ul id="suggestions" class="suggestions"></ul>
   <div
@@ -18,7 +11,7 @@ const userEmail = session?.user?.email ?? "";
     style="display: none"
     class="absolute top-14 bg-[#2c2c2c] border border-[#4a4a4a] z-20 rounded-md py-12 left-0 w-full text-center text-gray-400 text-sm"
   >
-    No se encontraron peliculas con tu búsqueda
+    No se encontraron películas con tu búsqueda
   </div>
 </div>
 
@@ -92,9 +85,9 @@ const userEmail = session?.user?.email ?? "";
 
 <script>
   import { $ } from "@lib/dom";
+  import { SaveMovieToDB, searchMovies } from "@services/movies";
   import { debounce } from "@utils/debounce";
-  import { addNewMovieToList, reloadFilteredMovies } from "@utils/reload";
-  import { searchMovies, SaveMovieToDB } from "@services/movies";
+  import { addNewMovieToList } from "@utils/reload";
   import type { Movie } from "../types/movies";
 
   const searchInput = $<HTMLInputElement>("#movie-search");
