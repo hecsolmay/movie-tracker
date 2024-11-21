@@ -12,8 +12,6 @@ export function loadFilteredMovies (filter: string) {
   const movieCards = $$('.movie-card')
   let showCount = 0
 
-  console.log(movieCards.length)
-
   movieCards.forEach(card => {
     if (filter === 'all' || card.dataset.status === filter) {
       card.style.display = 'block'
