@@ -31,8 +31,23 @@ export default defineConfig({
         globPatterns: ['**/*.{css,woff,woff2,ttf,eot,ico}'],
         runtimeCaching: [
           {
+            // Imágenes externas (como avatares de GitHub)
+            urlPattern: /^https:\/\/avatars\.githubusercontent\.com\/.*$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'github-avatars',
+              expiration: {
+                maxEntries: 50, // Máximo de imágenes a almacenar
+                maxAgeSeconds: 7 * 24 * 60 * 60 // 7 días
+              },
+              cacheableResponse: {
+                statuses: [200] // Solo cachea respuestas exitosas
+              }
+            }
+          },
+          {
             // Imágenes y otros activos estáticos
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/,
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif|css|js|ts)$/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'static-assets',
