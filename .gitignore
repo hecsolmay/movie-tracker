@@ -32,3 +32,6 @@ pnpm-debug.log*
 #Ignore vercel files
 .vercel
 .vercel/**
+
+#PWA files
+dev-dist
